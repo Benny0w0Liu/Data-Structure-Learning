@@ -5,9 +5,9 @@ int main(){
 	//print Polynomial
 	for (int i = 5 - 1; i > -1; i--){
 		cout << Polynomial[i] << "x^" << i;
-        	if (i != 0){
-            	cout << " + ";
-       		}
+		if (i != 0){
+			cout << " + ";
+		}
 	}
 	return 0;
 }
