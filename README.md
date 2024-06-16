@@ -1,6 +1,6 @@
 # Data Structure Learning
  This is actually a preview for the data structure (course in the second year of college).
-# Data Structure - Syllabus 
+# Syllabus 
 > The titles with star are not in the [112-1 CSE215](https://selcrs.nsysu.edu.tw/menu1/qrycrsfrm.asp?HIS=2&eng=0) Data Structure Course syllabus.
 
 > Most content in part (I) had existed in [112-1 CSE131 ](https://selcrs.nsysu.edu.tw/menu1/qrycrsfrm.asp?HIS=2&eng=0) C Programming I.
