@@ -21,6 +21,22 @@ public:
 		}
 		return result;
 	}
+	const Matrix operator * (const Matrix& A){
+		if(A.row != col){
+			cout<<"Two matrix doesn't match!"<<endl;
+			exit(1);
+		}
+		Matrix result(row,A.col);
+		for(int i=0;i<row;i++){
+			for(int j=0;j<A.col;j++){
+				result.matrix[i][j] = 0;
+				for(int k=0;k<col;k++){
+					result.matrix[i][j]+=matrix[i][k]*A.matrix[k][j];
+				}
+			}
+		}
+		return result;
+	}
 	void output(){
 		for(int i=0;i<row;i++){
 			for(int j=0;j<col;j++){
@@ -52,4 +68,8 @@ int main(){
 	trans.transpose();
 	cout<<"After transpose:"<<endl;
 	trans.output();
+	
+	cout<<"Transpose matrix * Original matrix:"<<endl;
+	Matrix time = trans*test;
+	time.output();
 } 
