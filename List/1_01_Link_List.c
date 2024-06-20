@@ -1,5 +1,5 @@
 #include<stdio.h>
-struct Node{
+struct Node{ 
 	int data;
 	struct Node* next;
 };
@@ -47,7 +47,7 @@ void Reverse(struct Node** pointer_to_head){
 		prev = current;//move to current node
 		current = temp;//move to next node
 	}
-	*pointer_to_head = prev;
+	*pointer_to_head = prev;//set the head
 } 
 void Print(struct Node* head){
 	while(head!=NULL){//Travel the list
@@ -63,7 +63,7 @@ int main(){
 	Insert(&head,2,4);
 	Insert(&head,1,5);
 	Delete(&head,0);
-	//Reverse(&head);
+	Reverse(&head);
 	Print(head);
 	return 0;
 }
