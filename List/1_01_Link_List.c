@@ -1,4 +1,3 @@
-#include<stdlib.h>
 #include<stdio.h>
 struct Node{
 	int data;
@@ -40,7 +39,16 @@ void Delete(struct Node** pointer_to_head, int pos){
 	//Free the memory
 	free(temp2);
 }
-
+void Reverse(struct Node** pointer_to_head){
+	struct Node* temp = *pointer_to_head, *current = *pointer_to_head, *prev = NULL;
+	while(temp != NULL){
+		temp = current->next;//store the next node
+		current->next = prev;//reverse the link
+		prev = current;//move to current node
+		current = temp;//move to next node
+	}
+	*pointer_to_head = prev;
+} 
 void Print(struct Node* head){
 	while(head!=NULL){//Travel the list
 		printf("%d ", head->data);
@@ -55,6 +63,7 @@ int main(){
 	Insert(&head,2,4);
 	Insert(&head,1,5);
 	Delete(&head,0);
+	//Reverse(&head);
 	Print(head);
 	return 0;
 }
