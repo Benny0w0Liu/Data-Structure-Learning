@@ -12,15 +12,53 @@ struct Node* GetNewNode(int x){
 	new_node->prev=NULL;
 	return new_node;
 }
-void InsertAtHead(struct Node** pointerToHead,int x){
+void Insert(struct Node** pointerToHead,int pos,int x){
 	struct Node* new_node = GetNewNode(x);
-	if(*pointerToHead == NULL){		
-		*pointerToHead = new_node;
+	if(pos==0){
+		if(*pointerToHead == NULL){		
+			*pointerToHead = new_node;
+			return;
+		}
+		(*pointerToHead)->prev = new_node;
+		new_node->next = (*pointerToHead);
+		(*pointerToHead) = new_node;
 		return;
 	}
-	(*pointerToHead)->prev = new_node;
-	new_node->next = (*pointerToHead);
-	(*pointerToHead) = new_node;
+	struct Node* temp1 = *pointerToHead;
+	int i;
+	for(i=0;i<pos-1;i++){
+		if(temp1->next->next==NULL){//if position is bigger than the size
+			temp1->next->next=new_node;
+			new_node->prev = temp1->next;
+			return; 
+		}
+		temp1=temp1->next; 
+	}
+	struct Node* temp2=temp1->next;
+	temp1->next=new_node;
+	new_node->prev = temp1;
+	new_node->next = temp2;
+	temp2->prev=new_node;
+}
+void Delete(struct Node** pointerToHead, int pos){
+	if(*pointerToHead==NULL) return;// empty
+	struct Node* temp1= *pointerToHead;
+	if(pos==0){//Delete head
+		*pointerToHead = temp1->next;
+		(*pointerToHead)->prev=NULL;
+		free(temp1);
+		return;
+	}
+	//Fix the Links
+	int i;
+	for(i=0;i<pos-1;i++){
+		temp1 = temp1->next;
+	}
+	struct Node* temp2 = temp1->next;
+	temp1->next = temp2->next;
+	temp2->next->prev=temp1;
+	//Free the memory
+	free(temp2);
 }
 void Print(struct Node* head){
 	struct Node* temp = head;
@@ -46,9 +84,11 @@ void PrintReverse(struct Node* head){
 }
 int main(){
 	struct Node* head=NULL;
-	InsertAtHead(&head, 1);
-	InsertAtHead(&head, 2);
-	InsertAtHead(&head, 3);
+	Insert(&head, 0, 1);
+	Insert(&head, 0, 2);
+	Insert(&head, 0, 3);
+	Insert(&head, 2, 4);
+	Delete(&head, 1);
 	Print(head);
 	PrintReverse(head);
 	return 0;
