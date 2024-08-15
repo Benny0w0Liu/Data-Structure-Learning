@@ -1,5 +1,6 @@
 #include<stdio.h>
-struct Node{ 
+#include <stdlib.h>
+struct Node{
 	int data;
 	struct Node* next;
 };
@@ -49,12 +50,37 @@ void Reverse(struct Node** pointer_to_head){
 	}
 	*pointer_to_head = prev;//set the head
 } 
+void recursionReverse(struct Node** pointer_to_head, struct Node* current_node){
+	if(current_node->next==NULL){
+		*pointer_to_head = current_node;
+		return;
+	} 
+	recursionReverse(pointer_to_head, current_node->next);//go to next node
+	struct Node* next_node= current_node->next;//reverse link
+	next_node->next=current_node;//reverse link
+	current_node->next=NULL;
+} 
 void Print(struct Node* head){
 	while(head!=NULL){//Travel the list
 		printf("%d ", head->data);
 		head=head->next;
 	}
 	printf("\n");
+}
+void recursionPrint(struct Node* head){
+	if(head==NULL){
+		printf("\n");
+		return;
+	} 
+	printf("%d ",head->data);
+	recursionPrint(head->next);
+}
+void recursionPrintReserveOrder(struct Node* head){
+	if(head==NULL){
+		return;
+	} 
+	recursionPrintReserveOrder(head->next);
+	printf("%d ",head->data);
 }
 int main(){
 	struct Node* head = NULL; // empty list
@@ -65,5 +91,8 @@ int main(){
 	Delete(&head,0);
 	Reverse(&head);
 	Print(head);
+	recursionReverse(&head,head);
+	recursionPrint(head);
+	recursionPrintReserveOrder(head);
 	return 0;
 }
