@@ -5,7 +5,7 @@ void enqueue(int* queue, int size,int* front, int* rear, int x){
 		*front=0;
 		*rear=0;
 	}else{
-		(*rear)=((*rear)+1)%size;
+		(*rear)=((*rear)+1)%size;//can back to the 0
 	}
 	queue[*rear]=x;
 }
@@ -15,7 +15,7 @@ void dequeue(int* queue, int size, int* front, int* rear){
 		*front=-1;
 		*rear=-1;
 	}else{
-		(*front)=((*front)+1)%size;
+		(*front)=((*front)+1)%size;//can back to the 0
 	}
 }
 int main(){
