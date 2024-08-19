@@ -78,7 +78,7 @@ int main(){
 	cout<<"height of tree : "<<height(root)<<endl;
 	cout<<"minimum : "<<minimum(root)<<endl;
 	cout<<"maximum : "<<maximum(root)<<endl;
-	int n=25;
+	int n=15;
 	if(search(root, n))cout<<n<<" founded."<<endl;
 	else cout<<n<<" is not in the tree"<<endl;
 }
