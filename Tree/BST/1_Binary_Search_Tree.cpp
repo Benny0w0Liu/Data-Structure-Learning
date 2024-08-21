@@ -12,51 +12,42 @@ public:
 		left=right=NULL;
 	}
 };
-Node* insert(Node* root, int x){
-	if(root==NULL){//if empty
-		root=new Node(x);
+void insert(Node** rootPtr, int x){
+	Node* root = *rootPtr;
+	if(*rootPtr==NULL){//if empty
+		*rootPtr=new Node(x);
 	}else if(x<=root->data){//if x <= root, insert to left
-		root->left = insert(root->left, x);
+		insert(&(root->left), x);
 	}else{//if x > root, insert to right
-		root->right = insert(root->right, x);
+		insert(&(root->right), x);
 	}
-	return root;
 }
-bool search(Node* root, int x){
+Node* search(Node* root, int x){
 	if(root==NULL){
-		return false;
+		return NULL;
 	}else if(root->data==x){
-		return true;
+		return root;
 	}else if(x<=root->data){
 		search(root->left, x);
 	}else{
 		search(root->right, x);
 	}
 }
-int minimum(Node* root){
+Node* minimum(Node* root){
 	if(root==NULL){
 		cout<<"the tree is empty";
-		return 404;
+		return NULL;
 	}
-	if(root->left->left==NULL)return root->left->data;
+	if(root->left==NULL)return root;
 	return minimum(root->left);
 }
-int maximum(Node* root){
+Node* maximum(Node* root){
 	if(root==NULL){
 		cout<<"the tree is empty";
-		return 404;
+		return NULL;
 	}
-	if(root->right->right==NULL)return root->right->data;
+	if(root->right==NULL)return root;
 	return maximum(root->right);
-}
-int height(Node* root){
-	if(root==NULL) return -1;
-	int leftHeight=height(root->left), right_Height=height(root->right);
-	if(leftHeight>right_Height){
-		return leftHeight+1;
-	}else{
-		return right_Height+1;
-	}
 }
 void print(Node* root, string prefix){
 	if(root!=NULL){
@@ -65,20 +56,98 @@ void print(Node* root, string prefix){
 		print(root->right,prefix+ "   ");
 	}
 }
+bool isBST(Node* root){
+	if(root==NULL || (root->left==NULL && root->right==NULL)) {
+		return true;
+	}else if(root->left!=NULL && root->right!=NULL){
+		return root->left->data <= root->data && root->right->data > root->data && isBST(root->left) && isBST(root->right);
+	}else if(root->left==NULL){
+		return root->right->data > root->data && isBST(root->right);
+	}else if(root->right==NULL){
+		return root->left->data <= root->data && isBST(root->left);
+	}
+}
+void deleteNode(Node** rootPtr, int x){
+	Node* root= *rootPtr;
+	if(*rootPtr==NULL)return;
+	if(x<root->data){
+		deleteNode(&(root->left), x);//visit left
+	}else if(x>root->data){
+		deleteNode(&(root->right), x);//visit right
+	}else{
+		if(root->right==NULL && root->left==NULL){//0 child
+			delete *rootPtr;
+			*rootPtr=NULL;
+		}else if(root->left==NULL){//1 child
+			Node* temp = *rootPtr;
+			*rootPtr = (*rootPtr)->right;
+			delete temp;
+		}else if(root->right==NULL){//1 child
+			Node* temp = *rootPtr;
+			*rootPtr = (*rootPtr)->left;
+			delete temp;
+		}else{//2 children	
+			Node*  min = minimum((*rootPtr)->right);
+			(*rootPtr)->data = min->data;
+			deleteNode(&(root->right),min->data);
+		}
+	}
+}
+Node* getInorderSuccessor(Node* root, int data){
+	Node* current = search(root, data);
+	if(current==NULL) return NULL;
+	if(current->right!=NULL){
+		return minimum(root->right);
+	}else{
+		Node* successor = NULL;
+		Node* ancestor = root;
+		while(current!=ancestor){
+			if(current->data<ancestor->data){
+				successor=ancestor;
+				ancestor=ancestor->left;
+			}else{
+				ancestor=ancestor->right;
+			}
+		}
+		return successor;
+	}
+}
 int main(){
 	Node* root=NULL;
-	root = insert(root,10);
-	root = insert(root,15);
-	root = insert(root,20);
-	root = insert(root,25);
-	root = insert(root,8);
-	root = insert(root,12);
-	root = insert(root,2);
+	insert(&root,10);
+	insert(&root,15);
+	insert(&root,20);
+	insert(&root,25);
+	insert(&root,8);
+	insert(&root,12);
+	insert(&root,2);
+	deleteNode(&root,15);
+	
 	print(root,"");
-	cout<<"height of tree : "<<height(root)<<endl;
-	cout<<"minimum : "<<minimum(root)<<endl;
-	cout<<"maximum : "<<maximum(root)<<endl;
-	int n=15;
-	if(search(root, n))cout<<n<<" founded."<<endl;
+	
+	cout<<"minimum : "<<minimum(root)->data<<endl;
+	cout<<"maximum : "<<maximum(root)->data<<endl;
+	
+	int n=15, m=12;
+	if(search(root, n))cout<<search(root, n)->data<<" founded, at "<<search(root, n)<<endl;
 	else cout<<n<<" is not in the tree"<<endl;
+	
+	cout<<"inorder successor of "<<m<<" is "<<getInorderSuccessor(root,m)->data<<endl;
+	
+	Node* root1=new Node(0);
+	root1->left=new Node(1);
+	root1->right=new Node(2);
+	root1->left->left=new Node(3);
+	root1->left->right=new Node(4);
+	root1->left->right->right=new Node(5);
+	Node* root2=new Node(4);
+	root2->left=new Node(1);
+	root2->right=new Node(5);
+	root2->left->left=new Node(0);
+	root2->left->right=new Node(2);
+	root2->left->right->right=new Node(3);
+	if(isBST(root1))cout<<"root1 is BST"<<endl;
+	else cout<<"root1 is not BST"<<endl;
+	if(isBST(root2))cout<<"root2 is BST"<<endl;
+	else cout<<"root2 is not BST"<<endl;
 }
